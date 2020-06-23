@@ -30,7 +30,6 @@ func NewProxy(address string) (*Proxy, error) {
 
 // ServeUDP implements the Handler interface.
 func (p *Proxy) ServeUDP(conn *Conn) {
-	log.Infof("Handling connection from %s", conn.rAddr)
 
 	// needed because of e.g. server.trackedConnection
 	defer conn.Close()

@@ -55,6 +55,7 @@ func udpListenAndServe() {
 	log.Info("Accepting and proxying connections on ", runtimeConfig.ServePort)
 
 	for {
+
 		conn, err := portListen.Accept()
 		if err != nil {
 			log.Error(err)
