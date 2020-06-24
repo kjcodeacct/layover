@@ -24,13 +24,45 @@ Logging is intended for debug use.
 Coming Soon
 
 ## Building
-Coming Soon
+Go version 1.14+ required
 
-## Usage
-Coming Soon
+Manual Compilation
+```
+$ go build
+```
+
+## Installation
+Go version 1.14+ required
+
+Go Get
+```
+$ go get -U github.com/kjcodeacct/layover
+```
+
+Docker
+See [below](#docker)
+
+## CLI
+
+### Minimal
+```
+$ export LAYOVER_SERVEPORT=8080
+$ export LAYOVER_PROXYPORT=8081
+$ layover
+```
+
+### Complete
 
 ## Docker
-Coming Soon
+
+While it is recommended to use docker-compose, which is included the following is 
+
+### Minimal
+
+Docker Run
+```
+docker run -d --restart-always -p 8080:8080 kjcodeacct/layover -e LAYOVER_PROXYPORT=8081 
+```
 
 # Dependencies
 Docker API 1.40+
