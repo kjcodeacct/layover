@@ -56,25 +56,30 @@ docker-compose up layover
 Below is a complete list of configuration for more complex needs
 
 * LAYOVER_PROXYHOST - default:"0.0.0.0"
-	* the host layover is proxying from, unless specifying to a different host machine use the default
+	* the host layover is proxying from, unless specifying to a different host machine uses the default
 
 * LAYOVER_PROXYPORT - required:true
 	* the port layover is proxying *FROM*
+    * this is *typically* the port not in the container system
 
 * LAYOVER_PROTOCOL - default:"tcp"
 	* IP protocol used by the specified port
+    * options available 
+        * "tcp"
+        * "udp"
 
-* LAYOVER_SERVEPORT default - "8080"
-	* the port layover is proxying *TO*
+* LAYOVER_SERVEPORT default - default:"8080"
+	* the port layover is proxying *TO* and is serving
+    * if running in a container typically does *not* need to be specified
 
 * LAYOVER_DEBUGMODE default - "0"
-	* enabled or disable logging
+	* options available
 		* 0 - off
 		* 1 - basic logging of IP connecting and warnings
 		* 2 - full logging including data (please don't use in production)
 
 * LAYOVER_LOGDIR
-	* directory to place logfiles created by enabling the DEBUGMODE
+	* directory to place logfiles created by enabling the LAYOVER_DEBUGMODE
 
 # Dependencies
 Docker API 1.40+

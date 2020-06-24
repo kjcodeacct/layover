@@ -2,7 +2,11 @@ version: '3.3'
 services:
     layover:
         ports:
+          # maps host port to LAYOVER_SERVEPORT
             - '8080:8080'
         environment:
             - LAYOVER_PROXYPORT=8081
+        deploy:
+          restart_policy:
+            condition: any
         image: kjcodeacct/layover
