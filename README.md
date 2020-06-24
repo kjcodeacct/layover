@@ -3,7 +3,7 @@
 # Table of Contents
 
 - [Overview](#overview)
-- [Examples](#examples)
+- [Installing & Usage](#installing&usage)
 - [Dependencies](#dependencies)
 - [Shoutouts & Attribution](#attribution)
 - [License](#license)
@@ -16,24 +16,13 @@ a) Debug and log a whily networked application without getting into the weeds wi
 b) Relaying a port of a non containerized process into a container based network i.e [traefik ❤️](https://github.com/containous/traefik)
 
 ### Developers Note 
-Please do store debug logs on a live or production process, you are essentially logging all traffic, most likely unencrypted.
+Please do **not** store debug logs on a live production process, you are essentially logging all traffic, possibly unencrypted.
 
-Logging is intended for debug use.
-
-# Examples
-Coming Soon
-
-## Building
-Go version 1.14+ required
-
-Manual Compilation
-```
-$ go build
-```
+Logging is intended for *debug* use.
 
 # Installing & Usage
 
-## Manual
+## Installing
 While manual installation is *not* recommened for proxying over containers, it is available.
 
 golang 1.14+ is required
@@ -41,17 +30,16 @@ golang 1.14+ is required
 $ go get -U github.com/kjcodeacct/layover
 ```
 
-### Usage
+## Usage
 
-#### Minimal
+### CLI
 ```
 $ export LAYOVER_SERVEPORT=8080
 $ export LAYOVER_PROXYPORT=8081
 $ layover
 ```
 
-## Docker
-
+### Docker
 While it is recommended to use docker-compose for simplicity, docker run is available.
 
 Docker Run
@@ -63,6 +51,30 @@ Docker Compose
 ```
 docker-compose up layover
 ```
+
+### Configuration
+Below is a complete list of configuration for more complex needs
+
+* LAYOVER_PROXYHOST - default:"0.0.0.0"
+	* the host layover is proxying from, unless specifying to a different host machine use the default
+
+* LAYOVER_PROXYPORT - required:true
+	* the port layover is proxying *FROM*
+
+* LAYOVER_PROTOCOL - default:"tcp"
+	* IP protocol used by the specified port
+
+* LAYOVER_SERVEPORT default - "8080"
+	* the port layover is proxying *TO*
+
+* LAYOVER_DEBUGMODE default - "0"
+	* enabled or disable logging
+		* 0 - off
+		* 1 - basic logging of IP connecting and warnings
+		* 2 - full logging including data (please don't use in production)
+
+* LAYOVER_LOGDIR
+	* directory to place logfiles created by enabling the DEBUGMODE
 
 # Dependencies
 Docker API 1.40+
