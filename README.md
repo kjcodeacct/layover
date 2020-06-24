@@ -31,37 +31,37 @@ Manual Compilation
 $ go build
 ```
 
-## Installation
-Go version 1.14+ required
+# Installing & Usage
 
-Go Get
+## Manual
+While manual installation is *not* recommened for proxying over containers, it is available.
+
+golang 1.14+ is required
 ```
 $ go get -U github.com/kjcodeacct/layover
 ```
 
-Docker
-See [below](#docker)
+### Usage
 
-## CLI
-
-### Minimal
+#### Minimal
 ```
 $ export LAYOVER_SERVEPORT=8080
 $ export LAYOVER_PROXYPORT=8081
 $ layover
 ```
 
-### Complete
-
 ## Docker
 
-While it is recommended to use docker-compose, which is included the following is 
-
-### Minimal
+While it is recommended to use docker-compose for simplicity, docker run is available.
 
 Docker Run
 ```
 docker run -d --restart-always -p 8080:8080 kjcodeacct/layover -e LAYOVER_PROXYPORT=8081 
+```
+
+Docker Compose
+```
+docker-compose up layover
 ```
 
 # Dependencies
