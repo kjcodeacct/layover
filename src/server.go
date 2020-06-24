@@ -14,11 +14,18 @@ func tcpListenAndServe() {
 	localConnection := fmt.Sprintf("%s:%d", "127.0.0.1", runtimeConfig.ServePort)
 	portListen, err := net.Listen(runtimeConfig.Protocol, localConnection)
 	if err != nil {
-		log.Fatal("failed to start up on port ", runtimeConfig.ServePort)
+		log.Fatal("Failed to start up on port ", runtimeConfig.ServePort)
 	}
 
 	proxyConnection := fmt.Sprintf("%s:%d", runtimeConfig.ProxyHost, runtimeConfig.ProxyPort)
 	proxy, err := tcp.NewProxy(proxyConnection, 10*time.Millisecond)
+	if err != nil {
+		log.Fatal("Failed to open connection to ", proxyConnection)
+	}
+
+	if proxy == nil {
+		log.Fatal("Failed to proxy to ", proxyConnection)
+	}
 
 	log.Info("Accepting and proxying connections on ", runtimeConfig.ServePort)
 
@@ -51,6 +58,9 @@ func udpListenAndServe() {
 
 	proxyConnection := fmt.Sprintf("%s:%d", runtimeConfig.ProxyHost, runtimeConfig.ProxyPort)
 	proxy, err := udp.NewProxy(proxyConnection)
+	if err != nil {
+		log.Fatal("Failed to proxy connection to ", proxyConnection)
+	}
 
 	log.Info("Accepting and proxying connections on ", runtimeConfig.ServePort)
 

@@ -3,6 +3,8 @@ package main
 import (
 	"flag"
 	"fmt"
+	"layover/tcp"
+	"layover/udp"
 	"os"
 
 	"go.uber.org/zap"
@@ -48,6 +50,9 @@ func setup() {
 
 	defer zapLogger.Sync()
 	log = zapLogger.Sugar()
+
+	tcp.SetLog(log)
+	udp.SetLog(log)
 
 	if *showHelp {
 		fmt.Println(helpPage)
