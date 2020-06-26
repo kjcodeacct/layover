@@ -10,3 +10,5 @@ services:
           restart_policy:
             condition: any
         image: kjcodeacct/layover
+        labels:
+          - "traefik.http.routers.layover.rule=Host(`layover.example.localhost`)"

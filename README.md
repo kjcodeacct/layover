@@ -3,6 +3,7 @@
 # Table of Contents
 
 - [Overview](#overview)
+- [Quick Start](#quickstart)
 - [Installing & Usage](#installing&usage)
 - [Dependencies](#dependencies)
 - [Shoutouts & Attribution](#attribution)
@@ -15,19 +16,36 @@ a) Debug and log a whily networked application without getting into the weeds wi
 
 b) Relaying a port of a non containerized process into a container based network i.e [traefik ❤️](https://github.com/containous/traefik)
 
-### Developers Note 
-Please do **not** store debug logs on a live production process, you are essentially logging all traffic, possibly unencrypted.
+# Quick Start
+For a very quick deployment please do the following
+* set your proxy port variable 'LAYOVER_PROXYPORT' in the docker-compose.yml
+* if you are using traefik, modify the host for 'traefik.http.routers.layover.rule', for more information
+go [here](https://docs.traefik.io/user-guides/docker-compose/basic-example/)
 
-Logging is intended for *debug* use.
+* run the following
+```
+$ docker-compose up -d --force-recreate --build layover
+```
 
 # Installing & Usage
 
 ## Installing
-While manual installation is *not* recommened for proxying over containers, it is available.
+While installation is *not* recommened for proxying over containers, it is available.
 
+### CLI
 golang 1.14+ is required
 ```
 $ go get -U github.com/kjcodeacct/layover
+```
+
+### Docker
+If you would like to build your own release of layover, please see the /src/Dockerfile for a local build
+and run the following for a successful image build.
+
+```
+$ CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags="-w -s" -o layover
+$ docker build . -t layover:test
+$ docker run -e LAYOVER_PROXYPORT=8090 --publish 8080:8080 --name test1 layover:test
 ```
 
 ## Usage
@@ -80,6 +98,11 @@ Below is a complete list of configuration for more complex needs
 
 * LAYOVER_LOGDIR
 	* directory to place logfiles created by enabling the LAYOVER_DEBUGMODE
+
+### Developers Note 
+Please do **not** store debug logs on a live production process, you are essentially logging all traffic, possibly unencrypted.
+
+Logging is intended for *debug* use.
 
 # Dependencies
 Docker API 1.40+
