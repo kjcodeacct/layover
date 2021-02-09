@@ -1,6 +1,6 @@
 ![Layover](./assets/layover.png)
 ![License](https://img.shields.io/github/license/kjcodeacct/layover)
-![Build Status](https://cloud.drone.io/api/badges/kjcodeacct/layover/status.svg)](https://cloud.drone.io/kjcodeacct/layover)
+[![Build Status](https://cloud.drone.io/api/badges/kjcodeacct/layover/status.svg)](https://cloud.drone.io/kjcodeacct/layover)
 
 # Table of Contents
 
