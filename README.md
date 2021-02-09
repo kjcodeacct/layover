@@ -1,13 +1,23 @@
 ![Layover](./assets/layover.png)
+![License](https://img.shields.io/github/license/kjcodeacct/layover)
+![Build Status](https://cloud.drone.io/api/badges/kjcodeacct/layover/status.svg)](https://cloud.drone.io/kjcodeacct/layover)
 
 # Table of Contents
 
+- [Table of Contents](#table-of-contents)
 - [Overview](#overview)
-- [Quick Start](#quickstart)
-- [Installing & Usage](#installing&usage)
+- [Quick Start](#quick-start)
+- [Installing & Usage](#installing--usage)
+	- [Installing](#installing)
+		- [CLI](#cli)
+		- [Docker](#docker)
+	- [Usage](#usage)
+		- [CLI](#cli-1)
+		- [Docker](#docker-1)
+		- [Configuration](#configuration)
+		- [Developers Note](#developers-note)
 - [Dependencies](#dependencies)
-- [Shoutouts & Attribution](#attribution)
-- [License](#license)
+- [Attribution](#attribution)
 
 # Overview
 Layover is a TCP & UDP socket proxy intended to help the following scenarios:
@@ -62,7 +72,7 @@ While it is recommended to use docker-compose for simplicity, docker run is avai
 
 Docker Run
 ```
-docker run -d --restart-always -p 8080:8080 kjcodeacct/layover -e LAYOVER_PROXYPORT=8081 
+docker run -d --restart-always -p 8080:8080 kjcodeacct/layover -e LAYOVER_PROXYPORT=8081
 ```
 
 Docker Compose
@@ -82,7 +92,7 @@ Below is a complete list of configuration for more complex needs
 
 * LAYOVER_PROTOCOL - default:"tcp"
 	* IP protocol used by the specified port
-    * options available 
+    * options available
         * "tcp"
         * "udp"
 
@@ -99,7 +109,7 @@ Below is a complete list of configuration for more complex needs
 * LAYOVER_LOGDIR
 	* directory to place logfiles created by enabling the LAYOVER_DEBUGMODE
 
-### Developers Note 
+### Developers Note
 Please do **not** store debug logs on a live production process, you are essentially logging all traffic, possibly unencrypted.
 
 Logging is intended for *debug* use.
