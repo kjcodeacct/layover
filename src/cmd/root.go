@@ -35,7 +35,13 @@ func Execute() {
 func init() {
 	cobra.OnInitialize(initConfig)
 
+	cwd, err := os.Getwd()
+	if err != nil {
+		fmt.Println(err)
+	}
+
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.layover.yaml)")
+	rootCmd.PersistentFlags().StringVar(&LogDir, "logdir", cwd, "directory to place log files in")
 
 	initLog()
 }

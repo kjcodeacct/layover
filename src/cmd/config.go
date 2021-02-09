@@ -14,12 +14,8 @@ import (
 var (
 	cfgFile string
 
-	ProxyHost      string
-	ProxyPort      int
-	ServeHost      string
-	ServePort      int
-	ProxyDebugMode int
-	LogDir         string
+	// LogDir - directory to place log files in
+	LogDir string
 )
 
 // initConfig reads in config file and ENV variables if set.

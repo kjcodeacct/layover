@@ -13,7 +13,7 @@ import (
 var log *zap.SugaredLogger
 
 // this is a very common, but benign error, i.e the proxied connection has closed after
-// recieving its data and not sending type appropriate headers
+// receiving its data and not sending type appropriate headers
 const tcpIgnoreError = "use of closed network connection"
 
 // SetLog shares the log used by the main process

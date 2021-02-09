@@ -27,9 +27,8 @@
 # Overview
 Layover is a TCP & UDP socket proxy intended to help the following scenarios:
 
-a) Debug and log a whily networked application without getting into the weeds with ncat
-
-b) Relaying a port of a non containerized process into a container based network i.e [traefik ❤️](https://github.com/containous/traefik)
+* Relaying a port of a non containerized process into a container based network i.e [traefik ❤️](https://github.com/containous/traefik)
+* Debug and log a whily networked application
 
 # Quick Start
 For a very quick deployment please do the following
@@ -69,7 +68,7 @@ $ docker run -e LAYOVER_PROXYPORT=8090 --publish 8080:8080 --name test1 layover:
 ```
 $ export LAYOVER_SERVEPORT=8080
 $ export LAYOVER_PROXYPORT=8081
-$ layover
+$ layover proxy
 ```
 
 ### Docker
@@ -95,11 +94,6 @@ Below is a complete list of configuration for more complex needs
 	* the port layover is proxying *FROM*
     * this is *typically* the port not in the container system
 
-* LAYOVER_PROTOCOL - default:"tcp"
-	* IP protocol used by the specified port
-    * options available
-        * "tcp"
-        * "udp"
 
 * LAYOVER_SERVEPORT default - default:"8080"
 	* the port layover is proxying *TO* and is serving

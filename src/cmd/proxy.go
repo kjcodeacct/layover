@@ -12,18 +12,35 @@ import (
 	"github.com/spf13/viper"
 )
 
+var (
+	// ProxyHost - host layover is proxying from
+	ProxyHost string
+	// ProxyPort - port layover is proxying from
+	ProxyPort int
+	// ServeHost - host layover is proxying to
+	ServeHost string
+	// ServePort - port layover is proxying to
+	ServePort int
+	// ProxyDebugMode - level of proxy debugging
+	// available values
+	// 0 - off
+	// 1 - basic logging of IP connecting and warnings
+	// 2 - full logging including data (please don't use in production)
+	ProxyDebugMode int
+)
+
 func init() {
 	rootCmd.AddCommand(proxyCmd)
 
-	rootCmd.PersistentFlags().StringVarP(&ProxyHost, "proxyhost", "", "127.0.0.1",
-		"host layover is proxy from")
-	rootCmd.PersistentFlags().IntVarP(&ProxyPort, "proxyport", "", 8080,
-		"host layover is proxy from")
-	rootCmd.PersistentFlags().StringVarP(&ServeHost, "servehost", "", "127.0.0.1",
-		"host layover is proxy to")
-	rootCmd.PersistentFlags().IntVarP(&ServePort, "serveport", "", 8081,
-		"host layover is proxy from")
-	rootCmd.PersistentFlags().IntVarP(&ProxyDebugMode, "debugmode", "", 0,
+	proxyCmd.PersistentFlags().StringVarP(&ProxyHost, "proxyhost", "", "127.0.0.1",
+		"host layover is proxying from")
+	proxyCmd.PersistentFlags().IntVarP(&ProxyPort, "proxyport", "", 8080,
+		"port layover is proxying from")
+	proxyCmd.PersistentFlags().StringVarP(&ServeHost, "servehost", "", "127.0.0.1",
+		"host layover is proxying to")
+	proxyCmd.PersistentFlags().IntVarP(&ServePort, "serveport", "", 8081,
+		"port layover is proxying to")
+	proxyCmd.PersistentFlags().IntVarP(&ProxyDebugMode, "debugmode", "", 0,
 		"level of proxy debugging (0 - off, 1 - basic logging , 2 - full logging")
 }
 
@@ -50,7 +67,7 @@ Variables:
 	* if running in a container typically does *not* need to be specified
 
 * LAYOVER_DEBUGMODE default - "0"
-	* options available
+	* available values
 		* 0 - off
 		* 1 - basic logging of IP connecting and warnings
 		* 2 - full logging including data (please don't use in production)
