@@ -1,13 +1,8 @@
-# This is an example Dockerfile primarily for testing but if you would like to build your own
-#   release of layover, please see the README.md section 'Installing'
-# $ CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags="-w -s" -o layover
-# $ docker build . -t layover:test
-# $ docker run -e LAYOVER_PROXYPORT=8090 --publish 8080:8080 --name test1 layover:test
+FROM golang:alpine AS builder
 
-FROM scratch
+WORKDIR $GOPATH/src/github.com/kjcodeacct/layover/src
+COPY . .
 
-# Copy our static executable.
-COPY layover /
+RUN export CGO_ENABLED=0 && go build -o /go/bin/layover
 
-# Run the layover binary.
-ENTRYPOINT ["/layover"]
+ENTRYPOINT ["/go/bin/layover"]

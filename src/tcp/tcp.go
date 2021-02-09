@@ -4,12 +4,17 @@ import (
 	"fmt"
 	"io"
 	"net"
+	"strings"
 	"time"
 
 	"go.uber.org/zap"
 )
 
 var log *zap.SugaredLogger
+
+// this is a very common, but benign error, i.e the proxied connection has closed after
+// recieving its data and not sending type appropriate headers
+const tcpIgnoreError = "use of closed network connection"
 
 // SetLog shares the log used by the main process
 func SetLog(logInstance *zap.SugaredLogger) {
@@ -79,16 +84,20 @@ func (p Proxy) connCopy(dst, src WriteCloser, errCh chan error) {
 
 	errClose := dst.CloseWrite()
 	if errClose != nil {
-		errMsg := fmt.Sprintf("Error while terminating connection: %v", errClose)
-		log.Warn(errMsg)
+		if !strings.Contains(errClose.Error(), tcpIgnoreError) {
+			errMsg := fmt.Sprintf("Error while terminating connection: %v", errClose)
+			log.Warn(errMsg)
+		}
 		return
 	}
 
 	if p.terminationDelay >= 0 {
 		err := dst.SetReadDeadline(time.Now().Add(p.terminationDelay))
 		if err != nil {
-			errMsg := fmt.Sprintf("Error while setting deadline: %v", err)
-			log.Warn(errMsg)
+			if !strings.Contains(err.Error(), tcpIgnoreError) {
+				errMsg := fmt.Sprintf("Error while setting deadline: %v", err)
+				log.Warn(errMsg)
+			}
 		}
 	}
 }
