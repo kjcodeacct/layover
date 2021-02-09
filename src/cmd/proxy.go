@@ -9,20 +9,61 @@ import (
 	"time"
 
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
+
+func init() {
+	rootCmd.AddCommand(proxyCmd)
+
+	rootCmd.PersistentFlags().StringVarP(&ProxyHost, "proxyhost", "", "127.0.0.1",
+		"host layover is proxy from")
+	rootCmd.PersistentFlags().IntVarP(&ProxyPort, "proxyport", "", 8080,
+		"host layover is proxy from")
+	rootCmd.PersistentFlags().StringVarP(&ServeHost, "servehost", "", "127.0.0.1",
+		"host layover is proxy to")
+	rootCmd.PersistentFlags().IntVarP(&ServePort, "serveport", "", 8081,
+		"host layover is proxy from")
+	rootCmd.PersistentFlags().IntVarP(&ProxyDebugMode, "debugmode", "", 0,
+		"level of proxy debugging (0 - off, 1 - basic logging , 2 - full logging")
+}
 
 // proxyCmd represents the proxy command
 var proxyCmd = &cobra.Command{
 	Use:   "proxy",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
+	Short: "Proxy a specified port from a designated host.",
+	Long: `Proxy a specified port from a designated host.
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+Variables:
+* LAYOVER_PROXYHOST - default:"127.0.0.1"
+	* the host layover is proxying *FROM*, unless specifying to a different host machine uses the default
+
+* LAYOVER_PROXYPORT - required:true
+	* the port layover is proxying *FROM*
+	* this is *typically* the port not in the container system
+
+* LAYOVER_SERVEHOST default - default:"127.0.0.1"
+	* the host layover is proxying *TO*, unless specifying to a different host machine uses the default
+	* if running in a container typically does *not* need to be specified
+
+* LAYOVER_SERVEPORT default - default:"8080"
+	* the port layover is proxying *TO* and is serving
+	* if running in a container typically does *not* need to be specified
+
+* LAYOVER_DEBUGMODE default - "0"
+	* options available
+		* 0 - off
+		* 1 - basic logging of IP connecting and warnings
+		* 2 - full logging including data (please don't use in production)
+
+* LAYOVER_LOGDIR
+	* directory to place logfiles created by enabling the LAYOVER_DEBUGMODE
+
+Example:
+LAYOVER_PROXYHOST:LAYOVER_PROXYPORT -> LAYOVER_SERVEHOST:LAYOVER_SERVEPORT
+`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("proxy called")
+
+		bindFlags(cmd, viper.GetViper())
 
 		var wg sync.WaitGroup
 
@@ -36,25 +77,13 @@ to quickly create a Cobra application.`,
 	},
 }
 
-func init() {
-	rootCmd.AddCommand(proxyCmd)
-
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// proxyCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// proxyCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
-}
-
 // tcpListenAndServe - loops and listens to all incoming connections on specified TCP port
 func tcpListenAndServe(wg sync.WaitGroup) {
 
-	localConnection := fmt.Sprintf("%s:%d", "127.0.0.1", ServePort)
-	portListen, err := net.Listen("tcp", localConnection)
+	tcp.SetLog(log)
+
+	serveConnection := fmt.Sprintf("%s:%d", ServeHost, ServePort)
+	portListen, err := net.Listen("tcp", serveConnection)
 	if err != nil {
 		log.Fatal("Failed to start up on port ", ServePort)
 	}
@@ -71,7 +100,7 @@ func tcpListenAndServe(wg sync.WaitGroup) {
 		log.Fatal("Failed to proxy to ", proxyConnection)
 	}
 
-	log.Info("Accepting and proxying TCP connections on ", ServePort)
+	log.Info("Accepting and proxying TCP connections from ", proxyConnection, " to ", serveConnection)
 
 	for {
 		conn, err := portListen.Accept()
@@ -90,8 +119,10 @@ func tcpListenAndServe(wg sync.WaitGroup) {
 // udpListenAndServe - loops and listens to all incoming connections on specified UDP port
 func udpListenAndServe(wg sync.WaitGroup) {
 
-	localConnection := fmt.Sprintf("%s:%d", "127.0.0.1", ServePort)
-	addr, err := net.ResolveUDPAddr("udp", localConnection)
+	udp.SetLog(log)
+
+	serveConnection := fmt.Sprintf("%s:%d", ServeHost, ServePort)
+	addr, err := net.ResolveUDPAddr("udp", serveConnection)
 	if err != nil {
 		log.Fatal("failed to start up on port ", ServePort)
 	}
@@ -108,7 +139,7 @@ func udpListenAndServe(wg sync.WaitGroup) {
 		log.Fatal("Failed to proxy connection to ", proxyConnection)
 	}
 
-	log.Info("Accepting and proxying UDP connections on ", ServePort)
+	log.Info("Accepting and proxying UDP connections from ", proxyConnection, " to ", serveConnection)
 
 	for {
 
