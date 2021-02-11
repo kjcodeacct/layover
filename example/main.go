@@ -25,9 +25,9 @@ func headerHandler(w http.ResponseWriter, req *http.Request) {
 
 func main() {
 
-	log.Println("starting up on port 8090")
+	log.Println("starting up on port 8080")
 	http.HandleFunc("/test", testHandler)
 	http.HandleFunc("/header-test", headerHandler)
 
-	http.ListenAndServe(":8090", nil)
+	http.ListenAndServe(":8080", nil)
 }
