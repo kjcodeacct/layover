@@ -1,4 +1,4 @@
-module layover
+module github.com/kjcodeacct/layover
 
 go 1.14
 

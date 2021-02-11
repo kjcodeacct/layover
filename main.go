@@ -1,6 +1,6 @@
 package main
 
-import "layover/cmd"
+import "github.com/kjcodeacct/layover/cmd"
 
 func main() {
 	cmd.Execute()
