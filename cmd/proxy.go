@@ -2,8 +2,8 @@ package cmd
 
 import (
 	"fmt"
-	"layover/tcp"
-	"layover/udp"
+	"github.com/kjcodeacct/layover/tcp"
+	"github.com/kjcodeacct/layover/udp"
 	"net"
 	"sync"
 	"time"
