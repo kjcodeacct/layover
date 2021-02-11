@@ -49,7 +49,7 @@ While installation is *not* recommened for proxying over containers, it is avail
 ### CLI
 golang 1.14+ is required
 ```
-$ go get -U github.com/kjcodeacct/layover
+$ go get -u github.com/kjcodeacct/layover
 ```
 
 ### Docker
