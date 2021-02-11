@@ -8,11 +8,11 @@ import (
 	"go.uber.org/zap"
 )
 
-var log *zap.SugaredLogger
+var logger *zap.SugaredLogger
 
 // SetLog shares the log used by the main process
 func SetLog(logInstance *zap.SugaredLogger) {
-	log = logInstance
+	logger = logInstance
 }
 
 // Below the methods for 'udpProxy' and 'WriteCloser' are a modification and generalized adaption of the code found here
@@ -37,7 +37,7 @@ func (p *Proxy) ServeUDP(conn *Conn) {
 	connBackend, err := net.Dial("udp", p.target)
 	if err != nil {
 		errMsg := fmt.Sprintf("Error while connecting to backend: %v", err)
-		log.Warn(errMsg)
+		logger.Warn(errMsg)
 		return
 	}
 
@@ -51,7 +51,7 @@ func (p *Proxy) ServeUDP(conn *Conn) {
 	err = <-errChan
 	if err != nil {
 		errMsg := fmt.Sprintf("Error while serving UDP: %v", err)
-		log.Warn(errMsg)
+		logger.Warn(errMsg)
 	}
 
 	<-errChan
@@ -63,6 +63,6 @@ func (p Proxy) connCopy(dst io.WriteCloser, src io.Reader, errCh chan error) {
 
 	if err := dst.Close(); err != nil {
 		errMsg := fmt.Sprintf("Error while terminating connection: %v", err)
-		log.Warn(errMsg)
+		logger.Warn(errMsg)
 	}
 }

@@ -97,12 +97,12 @@ LAYOVER_PROXYHOST:LAYOVER_PROXYPORT -> LAYOVER_SERVEHOST:LAYOVER_SERVEPORT
 // tcpListenAndServe - loops and listens to all incoming connections on specified TCP port
 func tcpListenAndServe(wg sync.WaitGroup) {
 
-	tcp.SetLog(log)
+	tcp.SetLog(logger)
 
 	serveConnection := fmt.Sprintf("%s:%d", ServeHost, ServePort)
 	portListen, err := net.Listen("tcp", serveConnection)
 	if err != nil {
-		log.Fatal("Failed to start up on port ", ServePort)
+		logger.Fatal("Failed to start up on port ", ServePort)
 	}
 
 	proxyConnection := fmt.Sprintf("%s:%d", ProxyHost, ProxyPort)
@@ -110,19 +110,19 @@ func tcpListenAndServe(wg sync.WaitGroup) {
 	var timeout time.Duration
 	tcpProxy, err := tcp.NewProxy(proxyConnection, timeout)
 	if err != nil {
-		log.Fatal("Failed to open connection to ", proxyConnection)
+		logger.Fatal("Failed to open connection to ", proxyConnection)
 	}
 
 	if tcpProxy == nil {
-		log.Fatal("Failed to proxy to ", proxyConnection)
+		logger.Fatal("Failed to proxy to ", proxyConnection)
 	}
 
-	log.Info("Accepting and proxying TCP connections from ", proxyConnection, " to ", serveConnection)
+	logger.Info("Accepting and proxying TCP connections from ", proxyConnection, " to ", serveConnection)
 
 	for {
 		conn, err := portListen.Accept()
 		if err != nil {
-			log.Error(err)
+			logger.Error(err)
 		}
 
 		tcpProxy.ServeTCP(conn.(*net.TCPConn))
@@ -136,33 +136,33 @@ func tcpListenAndServe(wg sync.WaitGroup) {
 // udpListenAndServe - loops and listens to all incoming connections on specified UDP port
 func udpListenAndServe(wg sync.WaitGroup) {
 
-	udp.SetLog(log)
+	udp.SetLog(logger)
 
 	serveConnection := fmt.Sprintf("%s:%d", ServeHost, ServePort)
 	addr, err := net.ResolveUDPAddr("udp", serveConnection)
 	if err != nil {
-		log.Fatal("failed to start up on port ", ServePort)
+		logger.Fatal("failed to start up on port ", ServePort)
 	}
 
 	portListen, err := udp.Listen("udp", addr)
 	if err != nil {
-		log.Info(err)
-		log.Fatal("failed to start up on port ", ServePort)
+		logger.Info(err)
+		logger.Fatal("failed to start up on port ", ServePort)
 	}
 
 	proxyConnection := fmt.Sprintf("%s:%d", ProxyHost, ProxyPort)
 	udpProxy, err := udp.NewProxy(proxyConnection)
 	if err != nil {
-		log.Fatal("Failed to proxy connection to ", proxyConnection)
+		logger.Fatal("Failed to proxy connection to ", proxyConnection)
 	}
 
-	log.Info("Accepting and proxying UDP connections from ", proxyConnection, " to ", serveConnection)
+	logger.Info("Accepting and proxying UDP connections from ", proxyConnection, " to ", serveConnection)
 
 	for {
 
 		conn, err := portListen.Accept()
 		if err != nil {
-			log.Error(err)
+			logger.Error(err)
 		}
 
 		udpProxy.ServeUDP(conn)

@@ -11,7 +11,7 @@ import (
 const processName = "layover"
 const localhost = "127.0.0.1"
 
-var log *zap.SugaredLogger
+var logger *zap.SugaredLogger
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
@@ -50,5 +50,5 @@ func initLog() {
 	zapLogger, _ := zap.NewProduction()
 
 	defer zapLogger.Sync()
-	log = zapLogger.Sugar()
+	logger = zapLogger.Sugar()
 }

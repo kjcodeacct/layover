@@ -10,7 +10,7 @@ import (
 	"go.uber.org/zap"
 )
 
-var log *zap.SugaredLogger
+var logger *zap.SugaredLogger
 
 // this is a very common, but benign error, i.e the proxied connection has closed after
 // receiving its data and not sending type appropriate headers
@@ -18,7 +18,7 @@ const tcpIgnoreError = "use of closed network connection"
 
 // SetLog shares the log used by the main process
 func SetLog(logInstance *zap.SugaredLogger) {
-	log = logInstance
+	logger = logInstance
 }
 
 // below the methods for 'Proxy' and  'WriteCloser' are a modification and generalized adaption of the code found here
@@ -58,7 +58,7 @@ func (p *Proxy) ServeTCP(conn WriteCloser) {
 	connBackend, err := net.DialTCP("tcp", nil, p.target)
 	if err != nil {
 		errMsg := fmt.Sprintf("Error while connection to backend: %v", err)
-		log.Warn(errMsg)
+		logger.Warn(errMsg)
 		return
 	}
 
@@ -72,7 +72,7 @@ func (p *Proxy) ServeTCP(conn WriteCloser) {
 	err = <-errChan
 	if err != nil {
 		errMsg := fmt.Sprintf("Error during connection: %v", err)
-		log.Warn(errMsg)
+		logger.Warn(errMsg)
 	}
 
 	<-errChan
@@ -86,7 +86,7 @@ func (p Proxy) connCopy(dst, src WriteCloser, errCh chan error) {
 	if errClose != nil {
 		if !strings.Contains(errClose.Error(), tcpIgnoreError) {
 			errMsg := fmt.Sprintf("Error while terminating connection: %v", errClose)
-			log.Warn(errMsg)
+			logger.Warn(errMsg)
 		}
 		return
 	}
@@ -96,7 +96,7 @@ func (p Proxy) connCopy(dst, src WriteCloser, errCh chan error) {
 		if err != nil {
 			if !strings.Contains(err.Error(), tcpIgnoreError) {
 				errMsg := fmt.Sprintf("Error while setting deadline: %v", err)
-				log.Warn(errMsg)
+				logger.Warn(errMsg)
 			}
 		}
 	}

@@ -6,7 +6,7 @@ import (
 	"net/http"
 )
 
-func hello(w http.ResponseWriter, req *http.Request) {
+func testHandler(w http.ResponseWriter, req *http.Request) {
 
 	param := req.URL.Query().Get("msg")
 	url := fmt.Sprintf("%v %v %v", req.Method, req.URL, req.Proto)
@@ -14,7 +14,7 @@ func hello(w http.ResponseWriter, req *http.Request) {
 	fmt.Fprintf(w, "%s\n", param)
 }
 
-func headers(w http.ResponseWriter, req *http.Request) {
+func headerHandler(w http.ResponseWriter, req *http.Request) {
 
 	for name, headers := range req.Header {
 		for _, h := range headers {
@@ -26,8 +26,8 @@ func headers(w http.ResponseWriter, req *http.Request) {
 func main() {
 
 	log.Println("starting up on port 8090")
-	http.HandleFunc("/test", hello)
-	http.HandleFunc("/header-test", headers)
+	http.HandleFunc("/test", testHandler)
+	http.HandleFunc("/header-test", headerHandler)
 
 	http.ListenAndServe(":8090", nil)
 }
