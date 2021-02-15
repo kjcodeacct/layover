@@ -1,8 +1,14 @@
-FROM golang:alpine AS builder
+FROM golang:alpine
 
-WORKDIR $GOPATH/src/github.com/kjcodeacct/layover/src
+WORKDIR /go/src/github.com/kjcodeacct/layover
+
 COPY . .
 
-RUN export CGO_ENABLED=0 && go build -o /go/bin/layover
+RUN apk update && apk add --no-cache git
 
-ENTRYPOINT ["/go/bin/layover"]
+RUN export CGO_ENABLED=0
+RUN export GO111MODULE=on
+RUN go get -d -v
+RUN go build -o /go/bin/layover
+
+ENTRYPOINT ["/go/bin/layover", "proxy"]
