@@ -59,17 +59,15 @@ If you would like to build your own release of layover, please see the Dockerfil
 and run the following for a successful image build.
 
 ```
-$ CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags="-w -s" -o layover
-$ docker build . -t layover:test
-$ docker run -e LAYOVER_PROXYPORT=8090 --publish 8080:8080 --name test1 layover:test
+$ make docker
 ```
 
 ## Usage
 
 ### CLI
 ```
-$ export LAYOVER_SERVEPORT=8080
-$ export LAYOVER_PROXYPORT=8081
+$ export LAYOVER_SERVEPORT=8081
+$ export LAYOVER_PROXYPORT=8080
 $ layover proxy
 ```
 
@@ -78,7 +76,7 @@ While it is recommended to use docker-compose for simplicity, docker run is avai
 
 Docker Run
 ```
-docker run -d --restart-always -p 8080:8080 kjcodeacct/layover -e LAYOVER_PROXYPORT=8081
+$ docker run -e LAYOVER_SERVEPORT=8081 --publish 8080:8080 --publish 8081:8081 kjcodeacct/layover
 ```
 
 Docker Compose
@@ -96,7 +94,7 @@ Flags can be provided either by the CLI flag or via ENV variables
 | proxyhost | `LAYOVER_PROXYHOST` | string | the host layover is proxying from, unless specified to a different host machine uses the default                                          | 0.0.0.0 |
 | proxyport | `LAYOVER_PROXYPORT` | int    | the port layover is proxying *FROM*, this is *typically* the port not in the container system                                             | 8081    |
 | serveport | `LAYOVER_SERVEPORT` | int    | the port layover is proxying *TO* and is serving, if running in a container typically does *not* need to be specified                     | 8080    |
-| serveport | `LAYOVER_DEBUGMODE` | int    | logging level: 0 - off, 1 - basic logging of IP connecting and warnings, 2 - full logging including data (please don't use in production) | 0       |
+| debugmode | `LAYOVER_DEBUGMODE` | int    | logging level: 0 - off, 1 - basic logging of IP connecting and warnings, 2 - full logging including data (please don't use in production) | 0       |
 
 
 ### Developers Note
@@ -111,5 +109,3 @@ Golang version 1.14+
 
 # Attribution
 Traefik <https://github.com/containous/traefik>
-
-This handy tool <https://github.com/magicmark/composerize>
