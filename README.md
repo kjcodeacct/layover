@@ -4,7 +4,7 @@
 ![License](https://img.shields.io/github/license/kjcodeacct/layover)
 [![Go Report Card](https://goreportcard.com/badge/github.com/kjcodeacct/layover)](https://goreportcard.com/report/github.com/kjcodeacct/layover)
 [![Build Status](https://cloud.drone.io/api/badges/kjcodeacct/layover/status.svg)](https://cloud.drone.io/kjcodeacct/layover)
-[![Docker Build Status](https://img.shields.io/docker/build/kjcodeacct/layover)](https://hub.docker.com/repository/docker/kjcodeacct/layover)
+[![Docker Build Status](https://img.shields.io/docker/v/kjcodeacct/layover?label=docker%20hub&logo=docker)](https://hub.docker.com/repository/docker/kjcodeacct/layover)
 
 
 # Table of Contents
