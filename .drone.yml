@@ -2,6 +2,10 @@ kind: pipeline
 type: docker
 name: default
 
+environment:
+  author_name: kjcodeacct
+  process_name: layover
+
 steps:
   - name: build
     image: golang
@@ -24,5 +28,15 @@ steps:
       files: binaries/*.tar.gz
     checksum:
       - sha256
+    when:
+      event: tag
+
+  - name: docker push
+    image: plugins/docker
+    settings:
+      username: ${author_name}
+      password: docker_api_key
+      repo: ${author_name}/process_name
+      tags: latest
     when:
       event: tag
