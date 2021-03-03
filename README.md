@@ -19,6 +19,7 @@
 	- [Building](#building)
 		- [Binaries](#binaries)
 		- [Docker](#docker)
+		- [CI/CD](#cicd)
 	- [Usage](#usage)
 		- [CLI](#cli)
 		- [Docker](#docker-1)
@@ -75,6 +76,9 @@ and run the following for a successful image build.
 ```
 $ make docker
 ```
+
+### CI/CD
+If you want to view steps used by <drone.io> for automated builds please view [.drone.yml](.drone.yml)
 
 ## Usage
 
