@@ -20,7 +20,7 @@ steps:
     image: plugins/github-release
     settings:
       api_key:
-        from_secret: github_api_token
+        from_secret: github_api_key
       files: binaries/*.tar.gz
     checksum:
       - sha256
