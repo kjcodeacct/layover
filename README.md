@@ -14,10 +14,13 @@
 - [Quick Start](#quick-start)
 - [Installing & Usage](#installing--usage)
 	- [Installing](#installing)
-		- [CLI](#cli)
+		- [Binary Releases](#binary-releases)
+		- [Go Get](#go-get)
+	- [Building](#building)
+		- [Binaries](#binaries)
 		- [Docker](#docker)
 	- [Usage](#usage)
-		- [CLI](#cli-1)
+		- [CLI](#cli)
 		- [Docker](#docker-1)
 		- [Configuration](#configuration)
 - [Dependencies](#dependencies)
@@ -45,12 +48,24 @@ $ docker-compose up -d --force-recreate --build layover
 ## Installing
 While installation is *not* recommened for proxying over containers, it is available.
 
-### CLI
+### Binary Releases
+Binary releases are available in the github releases page found [here](https://github.com/kjcodeacct/layover/releases)
+
+### Go Get
 golang 1.14+ is required
 set GO111MODULE=on
 
 ```
 $ go get -u github.com/kjcodeacct/layover
+```
+
+## Building
+
+
+### Binaries
+If you would like to manually build binaries available in the [releases page](https://github.com/kjcodeacct/layover/releases), run the following.
+```
+$ make binaries
 ```
 
 ### Docker
