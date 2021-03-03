@@ -1,14 +1,37 @@
-version: '3.3'
+version: "3.3"
 services:
-    layover:
-        ports:
-          # maps host port to LAYOVER_SERVEPORT
-            - '8080:8080'
-        environment:
-            - LAYOVER_PROXYPORT=8081
-        deploy:
-          restart_policy:
-            condition: any
-        image: kjcodeacct/layover
-        labels:
-          - "traefik.http.routers.layover.rule=Host(`layover.example.localhost`)"
+  traefik:
+    image: "traefik:v2.3"
+    container_name: traefik_container
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+    ports:
+      - "80:80"
+      # - "8080:8080"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+  whoami:
+    image: "traefik/whoami"
+    container_name: whoami_container
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.whoami.rule=Host(`whoami.localhost`)"
+      - "traefik.http.routers.whoami.entrypoints=web"
+  layover:
+    image: kjcodeacct/layover
+    container_name: layover_container
+    ports:
+      # maps host port to LAYOVER_SERVEPORT
+      - "8081:8081"
+    environment:
+      - LAYOVER_SERVEPORT=8081
+      - LAYOVER_SERVEHOST=0.0.0.0
+      - LAYOVER_PROXYPORT=8080
+      - LAYOVER_PROXYHOST=172.17.0.1
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.layover.rule=Host(`layover.localhost`)"
+      - "traefik.http.routers.layover.entrypoints=web"

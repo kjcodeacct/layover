@@ -20,7 +20,6 @@
 		- [CLI](#cli-1)
 		- [Docker](#docker-1)
 		- [Configuration](#configuration)
-		- [Developers Note](#developers-note)
 - [Dependencies](#dependencies)
 - [Attribution](#attribution)
 
@@ -72,16 +71,15 @@ $ layover proxy
 ```
 
 ### Docker
-While it is recommended to use docker-compose for simplicity, docker run is available.
 
 Docker Run
 ```
-$ docker run -e LAYOVER_SERVEPORT=8081 --publish 8080:8080 --publish 8081:8081 kjcodeacct/layover
+$ docker run -e LAYOVER_SERVEPORT=8081 -e LAYOVER_SERVEHOST=0.0.0.0 -e LAYOVER_PROXYHOST=172.17.0.1 -e LAYOVER_PROXYPORT=8080 --publish 8081:8081 kjcodeacct/layover
 ```
 
 Docker Compose
 ```
-docker-compose up layover
+$ docker-compose up layover
 ```
 
 ### Configuration
@@ -89,18 +87,12 @@ Below is a complete list of configuration for more complex needs
 
 Below are the available flags and their configuration.
 Flags can be provided either by the CLI flag or via ENV variables
-| Flag      | Env Variable        | Type   | Description                                                                                                                               | Default |
-| :-------- | :------------------ | :----- | :---------------------------------------------------------------------------------------------------------------------------------------- | :------ |
-| proxyhost | `LAYOVER_PROXYHOST` | string | the host layover is proxying from, unless specified to a different host machine uses the default                                          | 0.0.0.0 |
-| proxyport | `LAYOVER_PROXYPORT` | int    | the port layover is proxying *FROM*, this is *typically* the port not in the container system                                             | 8081    |
-| serveport | `LAYOVER_SERVEPORT` | int    | the port layover is proxying *TO* and is serving, if running in a container typically does *not* need to be specified                     | 8080    |
-| debugmode | `LAYOVER_DEBUGMODE` | int    | logging level: 0 - off, 1 - basic logging of IP connecting and warnings, 2 - full logging including data (please don't use in production) | 0       |
-
-
-### Developers Note
-Please do **not** store debug logs on a live production process, you are essentially logging all traffic, possibly unencrypted.
-
-Logging is intended for *debug* use.
+| Flag      | Env Variable        | Type   | Description                                                                                                                      | Default   |
+| :-------- | :------------------ | :----- | :------------------------------------------------------------------------------------------------------------------------------- | :-------- |
+| proxyhost | `LAYOVER_PROXYHOST` | string | the host layover is proxying from, unless specified to a different host machine uses the default                                 | 0.0.0.0   |
+| proxyport | `LAYOVER_PROXYPORT` | int    | the port layover is proxying *FROM*, this is *typically* the port not in the container system                                    | 8081      |
+| serveport | `LAYOVER_SERVEPORT` | int    | the port layover is proxying *TO* and is serving, if running in a container typically does *not* need to be specified            | 8080      |
+| servehost | `LAYOVER_SERVEHOST` | string | the host layover is proxying *TO* and is serving, if running in a container typically this needs to be specified to '172.17.0.1' | 127.0.0.1 |
 
 # Dependencies
 Docker API 1.40+
@@ -108,4 +100,5 @@ Docker API 1.40+
 Golang version 1.14+
 
 # Attribution
+Portions of TCP & UDP network handling was used from:
 Traefik <https://github.com/containous/traefik>

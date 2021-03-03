@@ -2,11 +2,12 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/kjcodeacct/layover/tcp"
-	"github.com/kjcodeacct/layover/udp"
 	"net"
 	"sync"
 	"time"
+
+	"github.com/kjcodeacct/layover/tcp"
+	"github.com/kjcodeacct/layover/udp"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -21,12 +22,6 @@ var (
 	ServeHost string
 	// ServePort - port layover is proxying to
 	ServePort int
-	// ProxyDebugMode - level of proxy debugging
-	// available values
-	// 0 - off
-	// 1 - basic logging of IP connecting and warnings
-	// 2 - full logging including data (please don't use in production)
-	ProxyDebugMode int
 )
 
 func init() {
@@ -36,12 +31,10 @@ func init() {
 		"host layover is proxying from")
 	proxyCmd.PersistentFlags().IntVarP(&ProxyPort, "proxyport", "", 8080,
 		"port layover is proxying from")
-	proxyCmd.PersistentFlags().StringVarP(&ServeHost, "servehost", "", "127.0.0.1",
+	proxyCmd.PersistentFlags().StringVarP(&ServeHost, "servehost", "", "0.0.0.0",
 		"host layover is proxying to")
 	proxyCmd.PersistentFlags().IntVarP(&ServePort, "serveport", "", 8081,
 		"port layover is proxying to")
-	proxyCmd.PersistentFlags().IntVarP(&ProxyDebugMode, "debugmode", "", 0,
-		"level of proxy debugging (0 - off, 1 - basic logging , 2 - full logging")
 }
 
 // proxyCmd represents the proxy command
@@ -65,15 +58,6 @@ Variables:
 * LAYOVER_SERVEPORT default - default:"8080"
 	* the port layover is proxying *TO* and is serving
 	* if running in a container typically does *not* need to be specified
-
-* LAYOVER_DEBUGMODE default - "0"
-	* available values
-		* 0 - off
-		* 1 - basic logging of IP connecting and warnings
-		* 2 - full logging including data (please don't use in production)
-
-* LAYOVER_LOGDIR
-	* directory to place logfiles created by enabling the LAYOVER_DEBUGMODE
 
 Example:
 LAYOVER_PROXYHOST:LAYOVER_PROXYPORT -> LAYOVER_SERVEHOST:LAYOVER_SERVEPORT
