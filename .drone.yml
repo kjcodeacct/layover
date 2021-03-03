@@ -2,10 +2,6 @@ kind: pipeline
 type: docker
 name: default
 
-environment:
-  author_name: kjcodeacct
-  process_name: layover
-
 steps:
   - name: build
     image: golang
@@ -16,9 +12,10 @@ steps:
   - name: docker push
     image: plugins/docker
     settings:
-      username: $author_name
-      password: docker_api_key
-      repo: $author_name/$process_name
+      username: kjcodeacct
+      password:
+        from_secret: docker_api_key
+      repo: kjcodeacct/layover
       tags: latest
     when:
       event: tag
