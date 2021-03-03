@@ -17,9 +17,9 @@ var logger *zap.SugaredLogger
 var rootCmd = &cobra.Command{
 	Use:   processName,
 	Short: "Proxy layover process",
-	Long: `# Layover
-single port proxy process
-<https://github.com/kjcodeacct/layover>
+	Long: `Layover
+Single port proxy process
+https://github.com/kjcodeacct/layover
 `,
 }
 
